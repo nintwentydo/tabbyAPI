@@ -10,7 +10,7 @@
 network:
   # The IP to host on (default: 127.0.0.1).
   # Use 0.0.0.0 to expose on all network adapters.
-  host: 127.0.0.1
+  host: 0.0.0.0
 
   # The port to host on (default: 5000).
   port: 5000
@@ -34,10 +34,10 @@ network:
 # Options for logging
 logging:
   # Enable prompt logging (default: False).
-  log_prompt: false
+  log_prompt: true
 
   # Enable generation parameter logging (default: False).
-  log_generation_params: false
+  log_generation_params: true
 
   # Enable request logging (default: False).
   # NOTE: Only use this for debugging!
@@ -67,7 +67,7 @@ model:
   # An initial model to load.
   # Make sure the model is located in the model directory!
   # REQUIRED: This must be filled out to load a model on startup.
-  model_name:
+  model_name: Pixtral-Large-Instruct-2411-exl2-4.0bpw
 
   # Names of args to use as a fallback for API load requests (default: []).
   # For example, if you always want cache_mode to be Q4 instead of on the inital model load, add "cache_mode" to this array.
@@ -76,7 +76,7 @@ model:
 
   # Max sequence length (default: Empty).
   # Fetched from the model's base sequence length in config.json by default.
-  max_seq_len:
+  max_seq_len: 131072
 
   # Load model with tensor parallelism.
   # Falls back to autosplit if GPU split isn't provided.
@@ -108,18 +108,18 @@ model:
 
   # Enable different cache modes for VRAM savings (default: FP16).
   # Possible values: 'FP16', 'Q8', 'Q6', 'Q4'.
-  cache_mode: FP16
+  cache_mode: Q4
 
   # Size of the prompt cache to allocate (default: max_seq_len).
   # Must be a multiple of 256 and can't be less than max_seq_len.
   # For CFG, set this to 2 * max_seq_len.
-  cache_size:
+  cache_size: 131072
 
   # Chunk size for prompt ingestion (default: 2048).
   # A lower value reduces VRAM usage but decreases ingestion speed.
   # NOTE: Effects vary depending on the model.
   # An ideal value is between 512 and 4096.
-  chunk_size: 2048
+  chunk_size: 6144
 
   # Set the maximum number of prompts to process at one time (default: None/Automatic).
   # Automatically calculated if left blank.
@@ -131,10 +131,10 @@ model:
   # If a model contains multiple templates in its tokenizer_config.json,
   # set prompt_template to the name of the template you want to use.
   # NOTE: Only works with chat completion message lists!
-  prompt_template:
+  prompt_template: pixtral
 
   # Enables vision support if the model supports it. (default: False)
-  vision: false
+  vision: true
 
   # Number of experts to use per token.
   # Fetched from the model's config.json if empty.
@@ -210,11 +210,11 @@ developer:
   disable_request_streaming: false
 
   # Enable the torch CUDA malloc backend (default: False).
-  cuda_malloc_backend: false
+  cuda_malloc_backend: true
 
   # Run asyncio using Uvloop or Winloop which can improve performance.
   # NOTE: It's recommended to enable this, but if something breaks turn this off.
-  uvloop: false
+  uvloop: true
 
   # Set process to use a higher priority.
   # For realtime process priority, run as administrator or sudo.
