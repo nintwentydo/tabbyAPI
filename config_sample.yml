@@ -18,7 +18,7 @@ network:
   # Disable HTTP token authentication with requests.
   # WARNING: This will make your instance vulnerable!
   # Turn on this option if you are ONLY connecting from localhost.
-  disable_auth: false
+  disable_auth: true
 
   # Disable fetching external content in response to requests, such as images from URLs.
   disable_fetch_requests: false
@@ -67,7 +67,7 @@ model:
   # An initial model to load.
   # Make sure the model is located in the model directory!
   # REQUIRED: This must be filled out to load a model on startup.
-  model_name: Pixtral-Large-Instruct-2411-exl2-2.5bpw
+  model_name: pixtral-12b-exl2-8.0bpw
 
   # Names of args to use as a fallback for API load requests (default: []).
   # For example, if you always want cache_mode to be Q4 instead of on the inital model load, add "cache_mode" to this array.
@@ -89,7 +89,7 @@ model:
 
   # Reserve VRAM used for autosplit loading (default: 96 MB on GPU 0).
   # Represented as an array of MB per GPU.
-  autosplit_reserve: [96]
+  autosplit_reserve: [0]
 
   # An integer array of GBs of VRAM to split between GPUs (default: []).
   # Used with tensor parallelism.
@@ -108,7 +108,7 @@ model:
 
   # Enable different cache modes for VRAM savings (default: FP16).
   # Possible values: 'FP16', 'Q8', 'Q6', 'Q4'.
-  cache_mode: Q4
+  cache_mode: FP16
 
   # Size of the prompt cache to allocate (default: max_seq_len).
   # Must be a multiple of 256 and can't be less than max_seq_len.
@@ -119,7 +119,7 @@ model:
   # A lower value reduces VRAM usage but decreases ingestion speed.
   # NOTE: Effects vary depending on the model.
   # An ideal value is between 512 and 4096.
-  chunk_size: 6144
+  chunk_size: 8192
 
   # Set the maximum number of prompts to process at one time (default: None/Automatic).
   # Automatically calculated if left blank.
@@ -131,7 +131,7 @@ model:
   # If a model contains multiple templates in its tokenizer_config.json,
   # set prompt_template to the name of the template you want to use.
   # NOTE: Only works with chat completion message lists!
-  prompt_template: pixtral
+  prompt_template: pixtral12b
 
   # Enables vision support if the model supports it. (default: False)
   vision: true
