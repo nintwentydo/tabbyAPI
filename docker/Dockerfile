@@ -27,11 +27,17 @@ RUN rm pyproject.toml
 # Copy the current directory contents into the container
 COPY . .
 
+# Copy the entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+
+# Make the entrypoint script executable
+RUN chmod +x /entrypoint.sh
+
 # Make port 5000 available to the world outside this container
 EXPOSE 5000
 
-# Set the entry point
-ENTRYPOINT ["python3"]
+# Set the entry point to the entrypoint script
+ENTRYPOINT ["/entrypoint.sh"]
 
 # Run main.py when the container launches
-CMD ["main.py"]
+CMD ["python3", "main.py"]
