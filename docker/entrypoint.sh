@@ -124,5 +124,64 @@ developer:
   realtime_process_priority: ${TB_REALTIME_PROCESS_PRIORITY:-false}
 EOL
 
+# ------------------------------------------------------------------------------
+# MODEL DOWNLOAD SECTION
+# ------------------------------------------------------------------------------
+
+# Set default model directory and model name if not provided
+MODEL_DIR="${TB_MODEL_DIR:-/app/models}"
+MODEL_NAME="${TB_MODEL_NAME}"
+
+# Ensure the model directory exists
+mkdir -p "${MODEL_DIR}"
+
+# Check if MODEL_ID is set; if not, inform the user and skip model download
+if [ -n "${MODEL_ID}" ]; then
+  echo "Starting model download..."
+
+  # Set the default branch if not specified
+  MODEL_BRANCH="${MODEL_BRANCH:-main}"
+
+  # If TB_MODEL_NAME is not set, derive it from MODEL_ID
+  if [ -z "${MODEL_NAME}" ]; then
+    MODEL_NAME="$(basename "${MODEL_ID}")"
+    echo "TB_MODEL_NAME not set. Using '${MODEL_NAME}' as model name."
+  fi
+
+  # Full path to the model directory
+  FULL_MODEL_PATH="${MODEL_DIR}/${MODEL_NAME}"
+
+  echo "Downloading model '${MODEL_ID}' to '${FULL_MODEL_PATH}'..."
+
+  # Change to the model directory
+  cd "${MODEL_DIR}" || exit 1
+
+  # Download the model using huggingface-cli
+  HF_HUB_ENABLE_HF_TRANSFER=1 huggingface-cli download \
+    "${MODEL_ID}" \
+    --local-dir "${MODEL_NAME}" \
+    --revision "${MODEL_BRANCH}" \
+    --cache-dir "${MODEL_DIR}/.cache" \
+    --resume
+
+  # Check if the download was successful
+  if [ $? -ne 0 ]; then
+    echo "Error downloading model '${MODEL_ID}'. Exiting."
+    exit 1
+  else
+    echo "Model '${MODEL_ID}' downloaded successfully."
+  fi
+
+else
+  echo "Environment variable MODEL_ID not set. Skipping model download."
+fi
+
+# Return to the app directory
+cd /app || exit 1
+
+# ------------------------------------------------------------------------------
+# END OF MODEL DOWNLOAD SECTION
+# ------------------------------------------------------------------------------
+
 # Execute the CMD
 exec "$@"
